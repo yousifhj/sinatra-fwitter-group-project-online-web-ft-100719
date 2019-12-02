@@ -28,10 +28,22 @@ class UsersController < ApplicationController
     end
 
     post '/login' do 
-        user = User.find_by(username: params[:username])
+        #binding.pry
+        @user = User.find_by(username: params[:username])
         session[:user_id] = @user.id 
-        redirect '/tweets'
+        redirect to '/tweets'
     end
 
- end 
+    get '/users/:slug' do
+        @user = User.find_by_slug(params[:slug])
+        erb :"users/show"
+    end 
 
+    get '/logout' do
+        if logged_in?
+            session.destroy
+        end
+            redirect to '/login'
+    end 
+
+end 
